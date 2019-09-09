@@ -141,15 +141,16 @@ module Enumerable
 
     result = !args.empty? ? args[0] : as_array[0]
 
-    1.upto(len - 1) { |i| result = yield(result, as_array[i]) }
+    0.upto(len - 1) { |i| result = yield(result, as_array[i]) }
     result
   end
 end
 
 def multiply_els(arr)
-  arr.inject { |sum, num| sum + num }
+  arr.my_inject { |sum, num| sum + num }
 end
 
-a = [2, 4, 6, 8]
+bug = [5, 6, 7, 8, 9, 10]
 
-p multiply_els(a)
+p bug.my_inject(5) { |sum, val| sum + val}
+p bug.inject(5) { |sum, val| sum + val}

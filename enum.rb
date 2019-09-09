@@ -28,7 +28,15 @@ module Enumerable
     end
 
     def my_select
+        result = []
+        as_array = convert_to_array(self)
 
+        return as_array unless as_array.is_a?(Array)
+        return self.to_enum(:my_select) unless block_given?
+
+        0.upto(as_array.length - 1) { |i| result << as_array[i] if yield(as_array[i])}
+
+        result
     end
 
     def my_all
@@ -61,5 +69,5 @@ def multiply_els arr
 
 end
 
-#[1,2,3,4].my_each { |n| puts n * 3 }
-[1,2,3,4].my_each_with_index { |v,i| p "value: #{v}  index:#{i}"  }
+
+[1,2,3,4].my_select { |v| p v % 2 == 0 ? v : nil }

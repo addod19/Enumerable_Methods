@@ -111,7 +111,23 @@ module Enumerable
     as_array.length
   end
 
-  def my_map; end
+  def my_map(*proc)
+    result = []
+    as_array = convert_to_array(self)
+    len = as_array.length
+
+    return as_array unless as_array.is_a?(Array)
+
+    raise ArgumentError.new("Use Proc instead") unless block_given? || proc.is_a?(Proc)
+
+    unless proc.empty?
+      0.upto(len - 1) { |i| result << proc[0].call(as_array[i])}
+      result
+    end
+    return self.to_enum(:my_map) unless block_given?
+    0.upto(len - 1) { |i| result << yield(as_array[i])}
+    result
+  end
 
   def my_inject; end
 end
@@ -120,4 +136,4 @@ def multiply_els(arr); end
 
 a = [2, 4, 6, 8]
 
-p a.my_count { |c| c > 3 }
+p a.my_map { |d| d ** 2 }

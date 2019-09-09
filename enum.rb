@@ -19,7 +19,12 @@ module Enumerable
     end
 
     def my_each_with_index
+        as_array = convert_to_array(self)
+        return as_array unless as_array.is_a?(Array)
+        return self.to_enum(:my_each_with_index) unless block_given?
 
+        0.upto(as_array.length - 1) { |i| yield(as_array[i], [i])}
+        self
     end
 
     def my_select
@@ -56,4 +61,5 @@ def multiply_els arr
 
 end
 
-[1,2,3,4].my_each { |n| puts n * 3 }
+#[1,2,3,4].my_each { |n| puts n * 3 }
+[1,2,3,4].my_each_with_index { |v,i| p "value: #{v}  index:#{i}"  }

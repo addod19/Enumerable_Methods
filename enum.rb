@@ -129,11 +129,24 @@ module Enumerable
     result
   end
 
-  def my_inject; end
+  def my_inject(*args)
+    as_array = convert_to_array(self)
+    len = as_array.length
+
+    return as_array unless as_array.is_a?(Array)
+
+    return self.to_enum(:my_inject) unless block_given?
+
+    result = !args.empty? ? args[0] : as_array[0]
+
+    1.upto(len - 1) { |i| result = yield(result, as_array[i])}
+    result
+  end
+
 end
 
 def multiply_els(arr); end
 
 a = [2, 4, 6, 8]
 
-p a.my_map { |d| d ** 2 }
+p a.my_inject { |s, n| s + n }

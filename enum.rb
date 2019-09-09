@@ -97,7 +97,19 @@ module Enumerable
     true
   end
 
-  def my_count; end
+  def my_count(*args)
+    as_array = convert_to_array(self)
+
+    return as_array unless as_array.is_a?(Array)
+
+    unless args.empty?
+      puts `#{caller[0].split(':')[0..-2].join(':')} warning: arguments already passed` if block_given?
+      return as_array.my_select { |v| v == args[0] }.length
+    end
+
+    return as_array.my_select { |v| yield v }.length if block_given?
+    as_array.length
+  end
 
   def my_map; end
 
@@ -108,4 +120,4 @@ def multiply_els(arr); end
 
 a = [2, 4, 6, 8]
 
-p a.my_none?(&:even?)
+p a.my_count

@@ -120,4 +120,4 @@ def multiply_els(arr); end
 
 a = [2, 4, 6, 8]
 
-p a.my_count
+p a.my_count { |c| c > 3 }

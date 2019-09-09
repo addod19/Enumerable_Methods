@@ -39,8 +39,22 @@ module Enumerable
         result
     end
 
-    def my_all
+    def my_all?(*args)
+        as_array = convert_to_array(self)
+        len = as_array.length
+        return as_array unless as_array.is_a?(Array)
 
+        unless args.empty?
+            puts `#{caller[0].split(":")[0..-2].join(":")} warning: arguments already passed` if block_given?
+            return as_array.grep(args[0]).length === len ? true : false
+        end
+
+        if block_given?
+            0.upto(len - 1) { |i| return false unless yield(as_array[i])}
+        else
+            0.upto(len - 1) { |i| return false if as_array[i] == nil || as_array[i] == false }
+        end
+        true
     end
     def my_any
 
@@ -70,4 +84,6 @@ def multiply_els arr
 end
 
 
-[1,2,3,4].my_select { |v| p v % 2 == 0 ? v : nil }
+a = [2,4,6,8]
+
+p a.my_all? { |n| n % 2 == 0 }

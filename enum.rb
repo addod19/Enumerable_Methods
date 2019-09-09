@@ -9,7 +9,13 @@ module Enumerable
     public
 
     def my_each
+        as_array = convert_to_array(self)
+        return as_array unless as_array.is_a?(Array)
+        return self.to_enum(:my_each) unless block_given?
 
+        0.upto(as_array.length - 1) { |i| yield(as_array[i])}
+
+        self
     end
 
     def my_each_with_index
@@ -49,4 +55,5 @@ end
 def multiply_els arr
 
 end
-p convert_to_array([])
+
+[1,2,3,4].my_each { |n| puts n * 3 }

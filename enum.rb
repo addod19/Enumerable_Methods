@@ -49,7 +49,7 @@ module Enumerable
 
     unless args.empty?
       puts `#{caller[0].split(':')[0..-2].join(':')} warning: arguments already passed` if block_given?
-      return as_array.grep(args[0]).length === len
+      return as_array.grep(args[0]).length == len
     end
 
     if block_given?
@@ -71,9 +71,9 @@ module Enumerable
       return as_array.grep(args[0]).empty? ? false : true
     end
     if block_given?
-      0.upto(len - 1) { |i| return true if yield(as_array[i])}
+      0.upto(len - 1) { |i| return true if yield(as_array[i]) }
     else
-      0.upto(len - 1) { |i| return true unless as_array[i] == nil || as_array[i] == false }
+      0.upto(len - 1) { |i| return true unless as_array[i].nil? || as_array[i] == false }
     end
     false
   end
@@ -92,7 +92,7 @@ module Enumerable
     if block_given?
       0.upto(len - 1) { |i| return false if yield(as_array[i]) }
     else
-      0.upto(len - 1) { |i| return false unless as_array[i] == nil || as_array[i] == false }
+      0.upto(len - 1) { |i| return false unless as_array[i].nil? || as_array[i] == false }
     end
     true
   end
@@ -108,6 +108,7 @@ module Enumerable
     end
 
     return as_array.my_select { |v| yield v }.length if block_given?
+
     as_array.length
   end
 
@@ -118,14 +119,15 @@ module Enumerable
 
     return as_array unless as_array.is_a?(Array)
 
-    raise ArgumentError.new("Use Proc instead") unless block_given? || proc.is_a?(Proc)
+    raise ArgumentError, 'Use Proc instead' unless block_given? || proc.is_a?(Proc)
 
     unless proc.empty?
-      0.upto(len - 1) { |i| result << proc[0].call(as_array[i])}
+      0.upto(len - 1) { |i| result << proc[0].call(as_array[i]) }
       result
     end
-    return self.to_enum(:my_map) unless block_given?
-    0.upto(len - 1) { |i| result << yield(as_array[i])}
+    return to_enum(:my_map) unless block_given?
+
+    0.upto(len - 1) { |i| result << yield(as_array[i]) }
     result
   end
 
@@ -135,18 +137,19 @@ module Enumerable
 
     return as_array unless as_array.is_a?(Array)
 
-    return self.to_enum(:my_inject) unless block_given?
+    return to_enum(:my_inject) unless block_given?
 
     result = !args.empty? ? args[0] : as_array[0]
 
-    1.upto(len - 1) { |i| result = yield(result, as_array[i])}
+    1.upto(len - 1) { |i| result = yield(result, as_array[i]) }
     result
   end
-
 end
 
-def multiply_els(arr); end
+def multiply_els(arr)
+  arr.inject { |sum, num| sum + num }
+end
 
 a = [2, 4, 6, 8]
 
-p a.my_inject { |s, n| s + n }
+p multiply_els(a)

@@ -132,17 +132,12 @@ module Enumerable
   end
 
   def my_inject(*args)
-    as_array = convert_to_array(self)
-    len = as_array.length
-
-    return as_array unless as_array.is_a?(Array)
-
-    return to_enum(:my_inject) unless block_given?
-
-    result = !args.empty? ? args[0] : as_array[0]
-
-    0.upto(len - 1) { |i| result = yield(result, as_array[i]) }
-    result
+    array = args + self
+		return nil if array.empty?
+		return array[0] if array.length==1
+		result = array[0]
+		array[1..-1].each{|element| result = yield(result, element)}
+		result
   end
 end
 
@@ -154,4 +149,4 @@ bug = [5, 6, 7, 8, 9, 10]
 
 p bug.my_inject(5) { |sum, val| sum + val}
 p bug.inject(5) { |sum, val| sum + val}
-p multiply_els(bug)
+p multiply_els([2,4,5])

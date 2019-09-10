@@ -133,11 +133,12 @@ module Enumerable
 
   def my_inject(*args)
     array = args + self
-		return nil if array.empty?
-		return array[0] if array.length==1
-		result = array[0]
-		array[1..-1].each{|element| result = yield(result, element)}
-		result
+    return nil if array.empty?
+    return array[0] if array.length == 1
+
+    result = array[0]
+    array[1..-1].each { |element| result = yield(result, element) }
+    result
   end
 end
 
@@ -147,6 +148,6 @@ end
 
 bug = [5, 6, 7, 8, 9, 10]
 
-p bug.my_inject(5) { |sum, val| sum + val}
-p bug.inject(5) { |sum, val| sum + val}
-p multiply_els([2,4,5])
+p bug.my_inject(5) { |sum, val| sum + val }
+p bug.inject(5) { |sum, val| sum + val }
+p multiply_els([2, 4, 5])
